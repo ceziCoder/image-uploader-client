@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+  /*  @media (max-width: 640px) { 
+	#slider {
+		display: flex;
+		flex-direction: column;
+		overflow-x: hidden;
+		overflow-y: scroll;
+	
+		
+		
+	}
+    #app {
+		display: flex;
+		flex-direction: column;
+		overflow-x: hidden;
+		overflow-y: scroll;
+		
+		
+	}
+}
+*/
+
+.slick-prev {
+  background-color: rgb(3, 0, 0);
+  color: white;
+   height: 50px;
+  width: 50px;
+  margin-left:  -25px;
+  border-radius: 0.375rem
+}
+
+
+.slick-next {
+  background-color: rgb(1, 0, 5);
+  color: white;
+  height: 50px;
+  width: 50px;
+  margin-right:  -25px;
+  border-radius: 0.375rem;
+}
+
+.center .slick-center {
+
+  transform:scale(1.1);
+  z-index: 10000;
+  transition: all 1000ms ease-in-out;
+  
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@keyframes motion-blur {
+  0% {
+    
+    transform: scale(1, 1);
+  }
+  15% {
+  
+    transform: scale(1, 0.98);
+  }
+  30% {
+    
+    transform: scale(1, 0.93);
+  }
+  45% {
+  
+    transform: scale(1.1, 0.9);
+  }
+  60% {
+    
+    transform: scale(1.2, 0.88);
+  }
+  75%,
+  100% {
+    
+    transform: scale(1.35, 0.85);
+  }
+}
+
+.do-transition {
+  animation: 
+    motion-blur 0.1s linear forwards,
+    motion-blur 0.4s linear reverse forwards 0.1s;
+}
