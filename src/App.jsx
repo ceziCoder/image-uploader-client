@@ -172,7 +172,7 @@ export default function App() {
 					action='/single'
 					method='POST'
 					enctype='multipart/form-data'>
-					<label className='m-4 cursor-pointer bg-green-200  rounded-md  p-2  shadow-lg shadow-black/80 hover:bg-green-300 '>
+					<label className='m-4 cursor-pointer bg-green-200  rounded-md  p-2  shadow-lg shadow-black/80 hover:bg-green-300 hover:scale-110'>
 						<AiOutlineFileSearch size={40} />
 						<input
 							className=' w-[30%] h-[30%] hidden'
@@ -186,7 +186,7 @@ export default function App() {
 					</label>
 
 					<BsCloudUpload
-						className=' bg-green-200 cursor-pointer shadow-md rounded-full p-2 shadow-black w-[45%] h-[45%] hover:bg-green-300 '
+						className=' bg-green-200 cursor-pointer shadow-md rounded-full p-2 shadow-black w-[45%] h-[45%] hover:bg-green-300 hover:scale-110'
 						onClick={uploadImage}
 						type='submit'></BsCloudUpload>
 				</form>
@@ -206,7 +206,7 @@ export default function App() {
 						<div className='   ' key={image.id}>
 							{images.length > 3 && (
 								<AiOutlineMinusCircle
-									className='absolute top-[8%]  ml-14 rounded-full bg-pink-500     w-6 h-6  shadow-white  shadow-sm cursor-pointer   '
+									className='absolute top-[8%]  ml-14 rounded-full bg-pink-500     w-6 h-6  shadow-white  shadow-sm cursor-pointer hover:scale-125 hover:shadow-white'
 									onClick={() => handleDelete(image.fileName)}
 								/>
 							)}
