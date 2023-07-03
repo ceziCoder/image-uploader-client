@@ -5,7 +5,7 @@ import FormData from 'form-data'
 import dotenv from 'dotenv'
 import { PuffLoader, PacmanLoader, CircleLoader } from 'react-spinners'
 import { AiOutlineMinusCircle, AiOutlineFileSearch } from 'react-icons/ai'
-import {  BsCloudUpload } from 'react-icons/bs'
+import { BsCloudUpload } from 'react-icons/bs'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
@@ -18,7 +18,6 @@ export default function App() {
 	const serverPublic = import.meta.env.VITE_REACT_APP_PUBLIC_FOLDER
 	const [images, setImages] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
-	
 
 	// handle Image Change
 	const onImageChange = (event) => {
@@ -32,6 +31,7 @@ export default function App() {
 	const fetchImages = async () => {
 		try {
 			const response = await axios.get('https://image-uploader-server-lqfb.onrender.com/public')
+			
 			if (response.status !== 200) {
 				throw new Error('Network response was not OK')
 			}
@@ -76,9 +76,8 @@ export default function App() {
 
 	///// load files from server
 	useEffect(() => {
-		
 		fetchImages()
-	}, [])
+	}, [images])
 
 	const convertBinaryToUrl = (binaryData) => {
 		const blob = new Blob([binaryData], { type: 'image/*' })
