@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
 import FormData from 'form-data'
 import dotenv from 'dotenv'
-import { PuffLoader } from 'react-spinners'
+import { PuffLoader, PacmanLoader, CircleLoader } from 'react-spinners'
 import { AiOutlineMinusCircle, AiOutlineFileSearch } from 'react-icons/ai'
 import {  BsCloudUpload } from 'react-icons/bs'
 import Slider from 'react-slick'
@@ -18,6 +18,7 @@ export default function App() {
 	const serverPublic = import.meta.env.VITE_REACT_APP_PUBLIC_FOLDER
 	const [images, setImages] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
+	
 
 	// handle Image Change
 	const onImageChange = (event) => {
@@ -67,7 +68,7 @@ export default function App() {
 			setTimeout(() => {
 				fetchImages()
 				setIsLoading(false)
-			}, 3000)
+			}, 1000)
 		} catch (error) {
 			console.error(error)
 		}
@@ -75,6 +76,7 @@ export default function App() {
 
 	///// load files from server
 	useEffect(() => {
+		
 		fetchImages()
 	}, [])
 
@@ -172,7 +174,7 @@ export default function App() {
 					action='/single'
 					method='POST'
 					enctype='multipart/form-data'>
-					<label className='m-4 cursor-pointer bg-green-200  rounded-md  p-2  shadow-lg shadow-black/80 hover:bg-green-300 hover:scale-110'>
+					<label className='m-4 cursor-pointer bg-green-200  rounded-md  p-2  shadow-lg shadow-black/80 scale-100 ease-in-out  duration-500  hover:bg-green-300 hover:scale-110'>
 						<AiOutlineFileSearch size={40} />
 						<input
 							className=' w-[30%] h-[30%] hidden'
@@ -186,7 +188,7 @@ export default function App() {
 					</label>
 
 					<BsCloudUpload
-						className=' bg-green-200 cursor-pointer shadow-md rounded-full p-2 shadow-black w-[45%] h-[45%] hover:bg-green-300 hover:scale-110'
+						className=' bg-green-200 cursor-pointer shadow-md rounded-full p-2 shadow-black w-[45%] h-[45%] scale-100 ease-in-out  duration-500  hover:bg-green-300 hover:scale-110'
 						onClick={uploadImage}
 						type='submit'></BsCloudUpload>
 				</form>
@@ -200,30 +202,37 @@ export default function App() {
 					{imageUrl && <img className='h-[90px] w-[90px]' src={imageUrl} alt='Obraz' />}
 				</div>
 			)}
-			<div className=' h-[600px] w-[500px] lg:h-[1400px] lg:w-[1400px]    rounded-xl mb-8  ' id='slider'>
-				<Slider className=' ' {...settings}>
-					{images.map((image) => (
-						<div className='   ' key={image.id}>
-							{images.length > 3 && (
-								<AiOutlineMinusCircle
-									className='absolute top-[8%]  ml-14 rounded-full bg-pink-500     w-6 h-6  shadow-white  shadow-sm cursor-pointer hover:scale-125 hover:shadow-white'
-									onClick={() => handleDelete(image.fileName)}
-								/>
-							)}
+			{!images.length ? (
+				<div className='flex justify-center items-center m-4'>
+					<CircleLoader color='#2c0725' size={100} />
+				</div>
+			) : (
+				<div className=' h-[600px] w-[500px] lg:h-[1400px] lg:w-[1400px]    rounded-xl mb-8  ' id='slider'>
+					<Slider className=' ' {...settings}>
+						{images.map((image) => (
+							<div className='   ' key={image.id}>
+								{images.length > 3 && (
+									<AiOutlineMinusCircle
+										className='absolute top-[8%]  ml-14 rounded-full bg-pink-500     w-6 h-6  shadow-white  shadow-sm cursor-pointer
+										scale-100 ease-in-out  duration-500 hover:scale-125  '
+										onClick={() => handleDelete(image.fileName)}
+									/>
+								)}
 
-							<img
-								id=''
-								className='  
+								<img
+									id=''
+									className='  
 									bg-pink-800/10 
 									h-[400px] w-[400px] 
 									  rounded-xl shadow-lg  object-center  shadow-white/50  lg:ml-12 lg:mb-8 lg:mt-8  p-10 m-auto p-auto '
-								src={image.content}
-								alt='Gallery Image'
-							/>
-						</div>
-					))}
-				</Slider>
-			</div>
+									src={image.content}
+									alt='Gallery Image'
+								/>
+							</div>
+						))}
+					</Slider>
+				</div>
+			)}
 		</div>
 	)
 }
