@@ -27,10 +27,12 @@ export default function App() {
 			setImageUrl(URL.createObjectURL(img))
 		}
 	}
+	const remoteServer = 'https://image-uploader-server-lqfb.onrender.com'
+	const localServer = 'http://localhost:3000'
 
 	const fetchImages = async () => {
 		try {
-			const response = await axios.get('https://image-uploader-server-lqfb.onrender.com/public')
+			const response = await axios.get('http://localhost:3000/public')
 			
 			if (response.status !== 200) {
 				throw new Error('Network response was not OK')
@@ -56,7 +58,7 @@ export default function App() {
 		formData.append('image', image)
 
 		try {
-			const response = await axios.post('https://image-uploader-server-lqfb.onrender.com/single', formData)
+			const response = await axios.post('http://localhost:3000/single', formData)
 			if (response.status !== 200) {
 				throw new Error('Network response was not OK')
 			}
@@ -77,7 +79,7 @@ export default function App() {
 	///// load files from server
 	useEffect(() => {
 		fetchImages()
-	}, [images])
+	}, [])
 
 	const convertBinaryToUrl = (binaryData) => {
 		const blob = new Blob([binaryData], { type: 'image/*' })
@@ -89,7 +91,7 @@ export default function App() {
 
 	const handleDelete = async (fileName) => {
 		try {
-			await axios.delete(`https://image-uploader-server-lqfb.onrender.com/single/${fileName}`)
+			await axios.delete(`http://localhost:3000/single/${fileName}`)
 
 			Swal.fire({
 				title: 'image deleted',
@@ -118,6 +120,7 @@ export default function App() {
 		centerPadding: '0px',
 		centerMode: true,
 		className: 'center',
+		lazyLoad: true,
 
 		initialSlide: 1,
 		pauseOnHover: true,
@@ -131,6 +134,7 @@ export default function App() {
 					infinite: true,
 					dots: true,
 					centerPadding: '10px',
+					lazyLoad:true
 				},
 			},
 			{
@@ -143,6 +147,7 @@ export default function App() {
 					centerPadding: '1px',
 					centerMode: true,
 					arrows: false,
+					lazyLoad:true
 				},
 			},
 			{
@@ -154,6 +159,7 @@ export default function App() {
 					centerPadding: '40px',
 					arrows: false,
 					centerMode: true,
+					lazyLoad:true
 				},
 			},
 		],
