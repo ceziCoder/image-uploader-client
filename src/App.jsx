@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
 import FormData from 'form-data'
 import dotenv from 'dotenv'
-import { PuffLoader, PacmanLoader, CircleLoader,ClockLoader } from 'react-spinners'
+import { PuffLoader, PacmanLoader, CircleLoader, ClockLoader } from 'react-spinners'
 import { AiOutlineMinusCircle, AiOutlineFileSearch } from 'react-icons/ai'
 import { BsCloudUpload } from 'react-icons/bs'
 import Slider from 'react-slick'
@@ -49,8 +49,10 @@ export default function App() {
 			console.error(error)
 		}
 	}
-
-	
+	///// load files from server
+	useEffect(() => {
+		fetchImages()
+	}, [])
 
 	// upload image to server and load new file
 	const uploadImage = async (e) => {
@@ -70,23 +72,14 @@ export default function App() {
 			const imageUrl = response.data.url
 			setImageUrl(imageUrl)
 
-			setTimeout(() => {
-				
+			
 				fetchImages()
 				setIsLoading(false)
-			}, 1000)
+		
 		} catch (error) {
 			console.error(error)
 		}
 	}
-
-	///// load files from server
-	useEffect(() => {
-		fetchImages()
-
-	
-	
-	}, [])
 
 	const convertBinaryToUrl = (binaryData) => {
 		const blob = new Blob([binaryData], { type: 'image/*' })
