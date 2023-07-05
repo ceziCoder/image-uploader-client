@@ -84,10 +84,7 @@ export default function App() {
 	useEffect(() => {
 		fetchImages()
 
-		const interval = setInterval(() => {
-			fetchImages()
-		},5000)
-		return () => clearInterval(interval)
+	
 	
 	}, [])
 
