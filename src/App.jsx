@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
 import FormData from 'form-data'
 import dotenv from 'dotenv'
-import { PuffLoader, PacmanLoader, CircleLoader } from 'react-spinners'
+import { PuffLoader, PacmanLoader, CircleLoader,ClockLoader } from 'react-spinners'
 import { AiOutlineMinusCircle, AiOutlineFileSearch } from 'react-icons/ai'
 import { BsCloudUpload } from 'react-icons/bs'
 import Slider from 'react-slick'
@@ -33,7 +33,7 @@ export default function App() {
 	const fetchImages = async () => {
 		try {
 			const response = await axios.get('https://image-uploader-server-lqfb.onrender.com/public')
-			
+
 			if (response.status !== 200) {
 				throw new Error('Network response was not OK')
 			}
@@ -49,6 +49,9 @@ export default function App() {
 			console.error(error)
 		}
 	}
+
+	
+
 	// upload image to server and load new file
 	const uploadImage = async (e) => {
 		e.preventDefault()
@@ -68,6 +71,7 @@ export default function App() {
 			setImageUrl(imageUrl)
 
 			setTimeout(() => {
+				
 				fetchImages()
 				setIsLoading(false)
 			}, 1000)
@@ -79,6 +83,12 @@ export default function App() {
 	///// load files from server
 	useEffect(() => {
 		fetchImages()
+
+		const interval = setInterval(() => {
+			fetchImages()
+		},5000)
+		return () => clearInterval(interval)
+	
 	}, [])
 
 	const convertBinaryToUrl = (binaryData) => {
@@ -91,7 +101,8 @@ export default function App() {
 
 	const handleDelete = async (fileName) => {
 		try {
-			await axios.delete(`https://image-uploader-server-lqfb.onrender.com/single/${fileName}`)
+			await axios.delete(`https://image-uploader-server-lqfb.onrender.com
+/single/${fileName}`)
 
 			Swal.fire({
 				title: 'image deleted',
@@ -134,7 +145,7 @@ export default function App() {
 					infinite: true,
 					dots: true,
 					centerPadding: '10px',
-					lazyLoad:true
+					lazyLoad: true,
 				},
 			},
 			{
@@ -147,7 +158,7 @@ export default function App() {
 					centerPadding: '1px',
 					centerMode: true,
 					arrows: false,
-					lazyLoad:true
+					lazyLoad: true,
 				},
 			},
 			{
@@ -159,7 +170,7 @@ export default function App() {
 					centerPadding: '40px',
 					arrows: false,
 					centerMode: true,
-					lazyLoad:true
+					lazyLoad: true,
 				},
 			},
 		],
@@ -209,13 +220,13 @@ export default function App() {
 			)}
 			{!images.length ? (
 				<div className='flex justify-center items-center m-4'>
-					<CircleLoader color='#2c0725' size={100} />
+					<ClockLoader color='#2c0725' size={50} />
 				</div>
 			) : (
 				<div className=' h-[600px] w-[500px] lg:h-[1400px] lg:w-[1400px]    rounded-xl mb-8  ' id='slider'>
 					<Slider className=' ' {...settings}>
 						{images.map((image) => (
-							<div className='   ' key={image.id}>
+							<div className='   ' key={image.fileName}>
 								{images.length > 3 && (
 									<AiOutlineMinusCircle
 										className='absolute top-[8%]  ml-14 rounded-full bg-pink-500     w-6 h-6  shadow-white  shadow-sm cursor-pointer
