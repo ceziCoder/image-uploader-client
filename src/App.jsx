@@ -34,7 +34,7 @@ export default function App() {
 
 	const fetchImages = async () => {
 		try {
-			const response = await axios.get('http://localhost:3000/public')
+			const response = await axios.get('https://image-uploader-server-lqfb.onrender.com/public')
 
 			if (response.status !== 200) {
 				throw new Error('Network response was not OK')
@@ -62,7 +62,7 @@ export default function App() {
 		formData.append('image', image)
 
 		try {
-			const response = await axios.post('http://localhost:3000/single', formData)
+			const response = await axios.post('https://image-uploader-server-lqfb.onrender.com/single', formData)
 			if (response.status !== 200) {
 				throw new Error('Network response was not OK')
 			}
@@ -105,7 +105,7 @@ export default function App() {
 
 	const handleDelete = async (fileName) => {
 		try {
-			await axios.delete(`http://localhost:3000/single/${fileName}`)
+			await axios.delete(`https://image-uploader-server-lqfb.onrender.com/single/${fileName}`)
 
 			Swal.fire({
 				title: 'image deleted',
