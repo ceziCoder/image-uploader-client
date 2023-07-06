@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 
 import axios from 'axios'
 import FormData from 'form-data'
@@ -33,8 +33,10 @@ export default function App() {
 	const localServer = 'http://localhost:3000'
 
 	const fetchImages = async () => {
+
+	const timestamp = Date.now()
 		try {
-			const response = await axios.get('https://image-uploader-server-lqfb.onrender.com/public')
+			const response = await axios.get(`https://image-uploader-server-lqfb.onrender.com/public?timestamp=${timestamp}`)
 
 			if (response.status !== 200) {
 				throw new Error('Network response was not OK')
@@ -46,7 +48,7 @@ export default function App() {
 				content: `data:${image.mimeType};base64,${image.content}`,
 			}))
 
-			setImages([...images])
+			setImages(images)
 	
 		} catch (error) {
 			console.error(error)
@@ -83,17 +85,11 @@ export default function App() {
 	///// load files from server
 	useEffect(() => {
 		fetchImages()
-		// start interval to refresh images
 		
-		const interval = setInterval(() => {
-			fetchImages()
-		}, 5000)
+		
+	},[])
 
-		// clear interval when component unmounts
-		return () => {
-			clearInterval(interval)
-		}
-	}, [])
+	 
 
 	const convertBinaryToUrl = (binaryData) => {
 		const blob = new Blob([binaryData], { type: 'image/*' })
@@ -117,12 +113,20 @@ export default function App() {
 				},
 			})
 			// Refresh images after deletion ////
-			setTimeout(fetchImages, 3000)
+			fetchImages()
+			
+
+		 
+		
+		
 		
 		} catch (error) {
 			console.error(error)
 		}
 	}
+	
+
+	
 	const settings = {
 		arrows: true,
 		speed: 200,
@@ -226,7 +230,7 @@ export default function App() {
 					{imageUrl && <img className='h-[90px] w-[90px]' src={imageUrl} alt='Obraz' />}
 				</div>
 			)}
-			{!images.length > 3 ? (
+			{images.length === 0 ? (
 				<div className='flex justify-center items-center m-4'>
 					<ClockLoader color='#2c0725' size={50} />
 				</div>
