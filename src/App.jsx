@@ -11,6 +11,8 @@ import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import Canvas from './components/Canvas'
 import Swal from 'sweetalert2'
+import basco2Logo from './public/basco2_logo.svg'
+
 
 export default function App() {
 	const [image, setImage] = useState(null)
@@ -32,7 +34,7 @@ export default function App() {
 
 	const fetchImages = async () => {
 		try {
-			const response = await axios.get('https://image-uploader-server-lqfb.onrender.com/public')
+			const response = await axios.get('http://localhost:3000/public')
 
 			if (response.status !== 200) {
 				throw new Error('Network response was not OK')
@@ -44,15 +46,12 @@ export default function App() {
 				content: `data:${image.mimeType};base64,${image.content}`,
 			}))
 
-			setImages(images)
+			setImages([...images])
+	
 		} catch (error) {
 			console.error(error)
 		}
 	}
-	///// load files from server
-	useEffect(() => {
-		fetchImages()
-	}, [])
 
 	// upload image to server and load new file
 	const uploadImage = async (e) => {
@@ -63,7 +62,7 @@ export default function App() {
 		formData.append('image', image)
 
 		try {
-			const response = await axios.post('https://image-uploader-server-lqfb.onrender.com/single', formData)
+			const response = await axios.post('http://localhost:3000/single', formData)
 			if (response.status !== 200) {
 				throw new Error('Network response was not OK')
 			}
@@ -72,14 +71,29 @@ export default function App() {
 			const imageUrl = response.data.url
 			setImageUrl(imageUrl)
 
-			
+			setTimeout(() => {
 				fetchImages()
 				setIsLoading(false)
-		
+			}, 1000)
 		} catch (error) {
 			console.error(error)
 		}
 	}
+
+	///// load files from server
+	useEffect(() => {
+		fetchImages()
+		// start interval to refresh images
+		
+		const interval = setInterval(() => {
+			fetchImages()
+		}, 5000)
+
+		// clear interval when component unmounts
+		return () => {
+			clearInterval(interval)
+		}
+	}, [])
 
 	const convertBinaryToUrl = (binaryData) => {
 		const blob = new Blob([binaryData], { type: 'image/*' })
@@ -91,8 +105,7 @@ export default function App() {
 
 	const handleDelete = async (fileName) => {
 		try {
-			await axios.delete(`https://image-uploader-server-lqfb.onrender.com
-/single/${fileName}`)
+			await axios.delete(`http://localhost:3000/single/${fileName}`)
 
 			Swal.fire({
 				title: 'image deleted',
@@ -104,7 +117,8 @@ export default function App() {
 				},
 			})
 			// Refresh images after deletion ////
-			fetchImages()
+			setTimeout(fetchImages, 3000)
+		
 		} catch (error) {
 			console.error(error)
 		}
@@ -170,9 +184,12 @@ export default function App() {
 		<div
 			className='h-full w-full flex flex-col  justify-center items-center    fixed     bg-gradient-to-r from-white/50 to-violet-100        '
 			id='app'>
-			<div className='absolute top-[290px] left-50  h-[400px] w-[500px] bg-pink-200 md:bg-pink-300   blur-3xl  ' />
-			<div className='  absolute top-[180px] left-[120px] h-[500px] w-[400px]  lg:bg-violet-500 blur-3xl  ' />
-			<div className='absolute top-[180px] right-[130px]  h-[500px] w-[400px] lg:bg-violet-500  blur-3xl  ' />
+			<div className='absolute h-[50px] w-[100px] sm:top-[30px] sm:left-[150px] left-[30px]  top-[40px] sm:h-[100px] sm:w-[200px] bg-blue-100 rounded-lg shadow-lg shadow-sky-200 sm:p-4 p-2  object-center'>
+				<img  src={basco2Logo} alt='Basco2 Logo' />
+			</div>
+			<div className='absolute top-[290px] left-50  h-[400px] w-[500px] bg-cyan-200 md:bg-blue-300   blur-3xl  ' />
+			<div className='  absolute top-[180px] left-[120px] h-[500px] w-[400px]  lg:bg-blue-400 blur-3xl  ' />
+			<div className='absolute top-[180px] right-[130px]  h-[500px] w-[400px] lg:bg-blue-400  blur-3xl  ' />
 
 			<div className=' flex justify-center items-center  mt-6'>
 				<form
@@ -180,7 +197,7 @@ export default function App() {
 					action='/single'
 					method='POST'
 					enctype='multipart/form-data'>
-					<label className='m-4 cursor-pointer bg-green-200  rounded-md  p-2  shadow-lg shadow-black/80 scale-100 ease-in-out  duration-500  hover:bg-green-300 hover:scale-110'>
+					<label className='m-4 cursor-pointer bg-sky-200  rounded-md  p-2  shadow-lg shadow-black/80 scale-100 ease-in-out  duration-500  hover:bg-sky-400 hover:scale-110'>
 						<AiOutlineFileSearch size={40} />
 						<input
 							className=' w-[30%] h-[30%] hidden'
@@ -194,11 +211,12 @@ export default function App() {
 					</label>
 
 					<BsCloudUpload
-						className=' bg-green-200 cursor-pointer shadow-md rounded-full p-2 shadow-black w-[45%] h-[45%] scale-100 ease-in-out  duration-500  hover:bg-green-300 hover:scale-110'
+						className=' bg-sky-200 cursor-pointer shadow-md rounded-full p-2 shadow-black w-[45%] h-[45%] scale-100 ease-in-out  duration-500  hover:bg-sky-400 hover:scale-110'
 						onClick={uploadImage}
 						type='submit'></BsCloudUpload>
 				</form>
 			</div>
+
 			{isLoading ? (
 				<div className='flex justify-center items-center m-4'>
 					<PuffLoader color='black' size={50} />
@@ -208,7 +226,7 @@ export default function App() {
 					{imageUrl && <img className='h-[90px] w-[90px]' src={imageUrl} alt='Obraz' />}
 				</div>
 			)}
-			{!images.length ? (
+			{!images.length > 3 ? (
 				<div className='flex justify-center items-center m-4'>
 					<ClockLoader color='#2c0725' size={50} />
 				</div>
@@ -219,7 +237,7 @@ export default function App() {
 							<div className='   ' key={image.fileName}>
 								{images.length > 3 && (
 									<AiOutlineMinusCircle
-										className='absolute top-[8%]  ml-14 rounded-full bg-pink-500     w-6 h-6  shadow-white  shadow-sm cursor-pointer
+										className='absolute top-[8%]  ml-14 rounded-full bg-sky-300     w-6 h-6  shadow-black  shadow-lg cursor-pointer hover:bg-sky-400
 										scale-100 ease-in-out  duration-500 hover:scale-125  '
 										onClick={() => handleDelete(image.fileName)}
 									/>
