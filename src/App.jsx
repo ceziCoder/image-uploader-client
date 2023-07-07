@@ -13,7 +13,6 @@ import Canvas from './components/Canvas'
 import Swal from 'sweetalert2'
 import basco2Logo from './public/basco2_logo.svg'
 
-
 export default function App() {
 	const [image, setImage] = useState(null)
 	const [imageUrl, setImageUrl] = useState(null)
@@ -32,9 +31,11 @@ export default function App() {
 	const remoteServer = 'https://image-uploader-server-lqfb.onrender.com'
 	const localServer = 'http://localhost:3000'
 
-	const fetchImages = async () => {
 
-	const timestamp = Date.now()
+
+	useEffect(() => {
+	const fetchImages = async () => {
+		const timestamp = Date.now()
 		try {
 			const response = await axios.get(`https://image-uploader-server-lqfb.onrender.com/public?timestamp=${timestamp}`)
 
@@ -48,12 +49,21 @@ export default function App() {
 				content: `data:${image.mimeType};base64,${image.content}`,
 			}))
 
-			setImages(images)
-	
+			setImages([...images])
 		} catch (error) {
 			console.error(error)
 		}
+		
 	}
+	fetchImages()
+
+	const interval = setInterval(fetchImages, 10000) 
+
+	return () => {
+		clearInterval(interval) 
+	}
+
+},[])
 
 	// upload image to server and load new file
 	const uploadImage = async (e) => {
@@ -74,7 +84,7 @@ export default function App() {
 			setImageUrl(imageUrl)
 
 			setTimeout(() => {
-				fetchImages()
+				
 				setIsLoading(false)
 			}, 1000)
 		} catch (error) {
@@ -84,12 +94,8 @@ export default function App() {
 
 	///// load files from server
 	useEffect(() => {
-		fetchImages()
 		
-		
-	},[])
-
-	 
+	}, [])
 
 	const convertBinaryToUrl = (binaryData) => {
 		const blob = new Blob([binaryData], { type: 'image/*' })
@@ -113,20 +119,15 @@ export default function App() {
 				},
 			})
 			// Refresh images after deletion ////
-			fetchImages()
-			
+			//setTimeout(fetchImages(), 4000)
 
-		 
-		
-		
-		
+			console.log('deleted')
 		} catch (error) {
 			console.error(error)
 		}
 	}
-	
+	//setInterval(fetchImages, 15000)
 
-	
 	const settings = {
 		arrows: true,
 		speed: 200,
@@ -188,9 +189,9 @@ export default function App() {
 		<div
 			className='h-full w-full flex flex-col  justify-center items-center    fixed     bg-gradient-to-r from-white/50 to-violet-100        '
 			id='app'>
-			<div className='absolute h-[50px] w-[100px] sm:top-[30px] sm:left-[150px] left-[30px]  top-[40px] sm:h-[100px] sm:w-[200px] bg-blue-100 rounded-lg shadow-lg shadow-sky-200 sm:p-4 p-2  object-center'>
-				<img  src={basco2Logo} alt='Basco2 Logo' />
-			</div>
+		{/*	<div className='absolute h-[50px] w-[100px] sm:top-[30px] sm:left-[150px] left-[30px]  top-[40px] sm:h-[100px] sm:w-[200px] bg-blue-100 rounded-lg shadow-lg shadow-sky-200 sm:p-4 p-2  object-center'>
+				<img src={basco2Logo} alt='Basco2 Logo' />
+	</div> */}
 			<div className='absolute top-[290px] left-50  h-[400px] w-[500px] bg-cyan-200 md:bg-blue-300   blur-3xl  ' />
 			<div className='  absolute top-[180px] left-[120px] h-[500px] w-[400px]  lg:bg-blue-400 blur-3xl  ' />
 			<div className='absolute top-[180px] right-[130px]  h-[500px] w-[400px] lg:bg-blue-400  blur-3xl  ' />
