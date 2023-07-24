@@ -189,7 +189,7 @@ export default function App() {
 		<div
 			className='h-full w-full flex flex-col  justify-center items-center    fixed     bg-gradient-to-r from-white/50 to-violet-100        '
 			id='app'>
-		{/*	<div className='absolute h-[50px] w-[100px] sm:top-[30px] sm:left-[150px] left-[30px]  top-[40px] sm:h-[100px] sm:w-[200px] bg-blue-100 rounded-lg shadow-lg shadow-sky-200 sm:p-4 p-2  object-center'>
+			{/*	<div className='absolute h-[50px] w-[100px] sm:top-[30px] sm:left-[150px] left-[30px]  top-[40px] sm:h-[100px] sm:w-[200px] bg-blue-100 rounded-lg shadow-lg shadow-sky-200 sm:p-4 p-2  object-center'>
 				<img src={basco2Logo} alt='Basco2 Logo' />
 	</div> */}
 			<div className='absolute top-[290px] left-50  h-[400px] w-[500px] bg-cyan-200 md:bg-blue-300   blur-3xl  ' />
@@ -256,6 +256,7 @@ export default function App() {
 									  rounded-xl shadow-lg  object-center  shadow-white/50  lg:ml-12 lg:mb-8 lg:mt-8  p-10 m-auto p-auto '
 									src={image.content}
 									alt='Gallery Image'
+									loading='lazy'
 								/>
 							</div>
 						))}
